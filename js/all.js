@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 const url = 'https://hexschool.github.io/js-filter-data/data.json';
 let data;
 let showData = [];
@@ -23,24 +21,21 @@ const renderData = (d) => {
     `;
     str += content;
   });
-  return str;
+  table.innerHTML = str;
 };
 
-axios.get(url)
-  /* eslint prefer-arrow-callback: ['error', { 'allowNamedFunctions': true } ] */
-  .then(function afterGet(res) {
-    data = res.data.filter((a) => a.作物名稱);
-    // TODO: 之後拆成 renderData 函式
-    const str = renderData(data);
-    table.innerHTML = str;
-  });
+/* global axios */
+axios.get(url).then((res) => {
+  data = res.data.filter((a) => a.作物名稱);
+  // TODO: 之後拆成 renderData 函式
+  renderData(data);
+});
 
 function filterCategory(e) {
   if (e.target.nodeName === 'BUTTON') {
     category = e.target.dataset.category;
     showData = data.filter((i) => i.種類代碼 === category);
-    const str = renderData(showData);
-    table.innerHTML = str;
+    renderData(showData);
   }
 }
 
